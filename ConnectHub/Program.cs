@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR.Client;
+﻿using ConnectHub.Models;
+using Microsoft.AspNetCore.SignalR.Client;
 using System.IO.Compression;
 
 namespace ConnectHub
@@ -9,8 +10,8 @@ namespace ConnectHub
         {
             var ct = new CancellationTokenSource();
 
-            string sessionId = "c34f3919-b386-4f90-8557-fe0bf1098e4d";
-            string hubUrl = "https://test-api.hishoo.online/live-emotions";
+            string sessionId = "02d04349-1705-4de1-affb-c9223224649a";
+            string hubUrl = "https://localhost:44346/live-emotions";
 
             _ = Task.Run(async () => 
             {
@@ -32,6 +33,9 @@ namespace ConnectHub
 
                 //recevive data
                 hubConnection.On<EmotionsResult>("EmotionsLiveResultResponse", EmotionsLiveResponse);
+
+                hubConnection.On<List<OperatorRankingToday>>("RankingLiveResultResponse", RankingLiveResultResponse);
+                hubConnection.On<SpeechRateML>("SpeechRateResultResponse", SpeechRateResultResponse);
             });
             
 
@@ -46,6 +50,22 @@ namespace ConnectHub
             Console.WriteLine($"{response.AudioTimeString} {response.Category} {response.Score}");
 
             await Task.CompletedTask;
+        }
+
+        static public async Task RankingLiveResultResponse(List<OperatorRankingToday> responseRankingOperators)
+        {
+            foreach (var item in responseRankingOperators)
+            {
+                Console.WriteLine($"Operator Name: {item.OperatorName}, Position: {item.Position} Score: {item.OpeartorScore}, Sale: {item.OperatorSale}, SpeechRate: {item.OperatorSpechRate}");
+            }
+
+            Console.WriteLine("---------------------------------------------------");
+        }
+
+        static public async Task SpeechRateResultResponse(SpeechRateML responseSpeechRate)
+        {
+            Console.WriteLine($"SpeechRate by operator: {responseSpeechRate.OperatorSpeechRate}, SpeechRate by customer: {responseSpeechRate.CustomerSpeechRate}");
+            Console.WriteLine("---------------------------------------------------");
         }
     }
 }
