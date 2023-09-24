@@ -36,6 +36,7 @@ namespace ConnectHub
 
                 hubConnection.On<List<OperatorRankingToday>>("RankingLiveResultResponse", RankingLiveResultResponse);
                 hubConnection.On<SpeechRateML>("SpeechRateResultResponse", SpeechRateResultResponse);
+                hubConnection.On<F0ML>("F0ResultResponse", F0ResultResponse);
             });
             
 
@@ -65,6 +66,12 @@ namespace ConnectHub
         static public async Task SpeechRateResultResponse(SpeechRateML responseSpeechRate)
         {
             Console.WriteLine($"SpeechRate by operator: {responseSpeechRate.OperatorSpeechRate}, SpeechRate by customer: {responseSpeechRate.CustomerSpeechRate}");
+            Console.WriteLine("---------------------------------------------------");
+        }
+
+        static public async Task F0ResultResponse(F0ML foML)
+        {
+            Console.WriteLine($"F0_mean : {foML.F0_mean}, F0_std: {foML.F0_std}, Intensity: {foML.Intensity}");
             Console.WriteLine("---------------------------------------------------");
         }
     }
