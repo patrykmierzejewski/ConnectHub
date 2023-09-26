@@ -33,9 +33,9 @@ namespace ConnectHub
 
                 //recevive data
                 hubConnection.On<EmotionsResult>("EmotionsLiveResultResponse", EmotionsLiveResponse);
-
                 hubConnection.On<List<OperatorRankingToday>>("RankingLiveResultResponse", RankingLiveResultResponse);
                 hubConnection.On<SpeechRateML>("SpeechRateResultResponse", SpeechRateResultResponse);
+                hubConnection.On<OperatorInfo>("OperatorInfoResultResponse", OperatorInfoResultResponse);
             });
             
 
@@ -65,6 +65,12 @@ namespace ConnectHub
         static public async Task SpeechRateResultResponse(SpeechRateML responseSpeechRate)
         {
             Console.WriteLine($"SpeechRate by operator: {responseSpeechRate.OperatorSpeechRate}, SpeechRate by customer: {responseSpeechRate.CustomerSpeechRate}");
+            Console.WriteLine("---------------------------------------------------");
+        }
+
+        static public async Task OperatorInfoResultResponse(OperatorInfo responseOperatorInfo)
+        {
+            Console.WriteLine($"Operator Points: {responseOperatorInfo.Points}");
             Console.WriteLine("---------------------------------------------------");
         }
     }
